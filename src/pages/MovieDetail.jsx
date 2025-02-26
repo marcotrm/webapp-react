@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
 import { getMovieById } from "../services/api";
-import ReviewList from "../components/ReviwList";
+import ReviewList from "../components/ReviwList"; // Nota: c'è un errore di battitura qui (ReviwList)
 import "../styles/movieDetail.css";
 
 function MovieDetail() {
@@ -28,6 +28,14 @@ function MovieDetail() {
     fetchMovieDetails();
   }, [id]);
 
+  const getImageUrl = (imagePath) => {
+    if (!imagePath) return null;
+    if (imagePath.startsWith("http://") || imagePath.startsWith("https://")) {
+      return imagePath;
+    }
+    return `http://localhost:3000/${imagePath}`;
+  };
+
   if (loading) return <div className="loading">Caricamento...</div>;
   if (error) return <div className="error">{error}</div>;
   if (!movie) return <div className="error">Film non trovato</div>;
@@ -40,13 +48,9 @@ function MovieDetail() {
 
       <div className="movie-detail">
         <div className="movie-poster">
-          <img
-            src={
-              movie.poster ||
-              "https://via.placeholder.com/300x450?text=No+Image"
-            }
-            alt={movie.title}
-          />
+          {getImageUrl(movie.image_url) && (
+            <img src={getImageUrl(movie.image_url)} alt={movie.title} />
+          )}
         </div>
 
         <div className="movie-info">

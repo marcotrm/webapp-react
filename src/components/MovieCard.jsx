@@ -2,13 +2,20 @@ import { Link } from "react-router-dom";
 import "../styles/movieCard.css";
 
 function MovieCard({ movie }) {
+  const getImageUrl = (imagePath) => {
+    if (!imagePath) return null;
+    if (imagePath.startsWith("http://") || imagePath.startsWith("https://")) {
+      return imagePath;
+    }
+    return `http://localhost:3000/${imagePath}`;
+  };
+
   return (
     <div className="movie-card">
       <div className="movie-poster">
-        <img
-          src={`http://localhost:5000/img/${movie.poster}`}
-          alt={movie.title}
-        />
+        {getImageUrl(movie.image_url) && (
+          <img src={getImageUrl(movie.image_url)} alt={movie.title} />
+        )}
       </div>
       <div className="movie-info">
         <h3>{movie.title}</h3>
